@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director's Toolbox: Creative AI Infrastructure</title>
+    <!-- We'll use inline SVG icons inspired by Heroicons -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles - Refined Black and Muted Pink Theme */
+        :root {
+            --bg: #0d0d0d;
+            --text: #f5f5f5;
+            --accent: #e91e63;
+            --secondary: #ff6b9d;
+            --tertiary: #9c27b0;
+            --surface: #1a1a1a;
+            --border: #333333;
+            --muted: #b0b0b0;
+            --shadow: rgba(0, 0, 0, 0.6);
+            --gradient: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            --glow-subtle: rgba(233, 30, 99, 0.15);
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-size: 18px;
+            position: relative;
+        }
+
+        /* Minimal background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 80%, var(--glow-subtle) 0%, transparent 60%);
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(3.5rem, 8vw, 5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+        
+        /* Top Banner */
+        .top-banner {
+            background: linear-gradient(90deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .top-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--secondary), var(--tertiary), transparent);
+        }
+        
+        .banner-content {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+        
+        .banner-text {
+            color: var(--muted);
+        }
+        
+        .banner-accent {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+            margin: 0 0.5rem;
+        }
+        
+        .hero-title-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .hero-title-section h1 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, var(--accent), var(--secondary), var(--tertiary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            white-space: nowrap;
+        }
+        
+        .hero-intro {
+            margin-bottom: 3rem;
+        }
+        
+        .intro-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        
+        .intro-main {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: var(--muted);
+            font-weight: 400;
+        }
+        
+        .intro-callout {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(233, 30, 99, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            position: relative;
+        }
+        
+        .intro-callout::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .intro-callout p {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0;
+            line-height: 1.3;
+        }
+        
+
+        h2 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            font-weight: 400;
+            color: var(--muted);
+            margin-bottom: 3rem;
+            line-height: 1.5;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            margin: 1rem auto 2rem;
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.3rem;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        em {
+            font-style: italic;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        /* Hero Section as Card */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+            background: radial-gradient(ellipse at center, rgba(233, 30, 99, 0.1) 0%, var(--bg) 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(26, 26, 26, 0.95) 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(233, 30, 99, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--secondary), transparent);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text .lead {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-family: 'Fira Code', monospace;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .hero-text .lead {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Clean Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            padding: 3px;
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .image-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(233, 30, 99, 0.5);
+        }
+        
+        .image-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 9px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .monster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .monster-img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Clean sections */
+        section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        /* Simple highlight for why now - no card styling */
+        .why-now-highlight {
+            border-left: 3px solid var(--accent);
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        /* Feature Grid - Enhanced layout */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            margin: 4rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary), var(--tertiary));
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(26, 26, 26, 0.6);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover .feature-icon {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(233, 30, 99, 0.5);
+        }
+        
+        .feature-item h4 {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        
+        .feature-item p {
+            text-align: center;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        
+        .feature-item em {
+            display: block;
+            margin-top: 1rem;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        /* CTA Section - Keep as Card */
+        .cta {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 3rem 0;
+        }
+
+        .cta h3 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+        
+        .cta .section-divider {
+            margin: 1rem auto 2rem;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .hero .action-buttons {
+            justify-content: flex-start;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 1rem 2rem;
+            border: 2px solid;
+            border-radius: 6px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+            background: var(--bg);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--tertiary), var(--accent));
+            color: white;
+        }
+
+        .btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.4);
+        }
+
+        .btn.tertiary {
+            border-color: var(--tertiary);
+            color: var(--tertiary);
+        }
+
+        .btn.tertiary:hover {
+            background-color: var(--tertiary);
+            color: var(--bg);
+        }
+
+        /* Subtle benefit details */
+        .benefit-details {
+            max-width: 700px;
+            margin: 2rem auto;
+            text-align: left;
+            font-size: 0.95rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        .benefit-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .benefit-section h5 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .channel-list {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin: 0.3rem 0;
+            opacity: 0.8;
+        }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: var(--accent);
+            margin: 2rem auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 2rem;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-visual {
+                height: 280px;
+                order: -1;
+            }
+            
+            .hero-title-section h1 {
+                font-size: clamp(2.5rem, 8vw, 3.5rem);
+            }
+            
+            .cta h3 {
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+            }
+            
+            .banner-content {
+                font-size: 1rem;
+            }
+            
+            .intro-columns {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .intro-main {
+                font-size: 1.25rem;
+            }
+            
+            .intro-callout p {
+                font-size: 1.4rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .benefit-details {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="banner-content">
+            <span class="banner-text">Stop Reinventing</span>
+            <span class="banner-accent">Start Directing</span>
+            <span class="banner-text">Together</span>
+        </div>
+    </div>
+    
+    <header class="hero">
+        <div class="container">
+            <div class="hero-title-section">
+                <h1>Director's Toolbox</h1>
+            </div>
+            
+            <div class="hero-intro">
+                <div class="intro-columns">
+                    <div class="intro-main">
+                        <p>To my fellow interactive artists, creative coders, and anyone who has ever tried to make an AI character <em>not</em> suck in public:</p>
+                    </div>
+                    <div class="intro-callout">
+                        <p>We've all been there.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-card">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <p>You spend months in your studio coaxing a soul into your AI character. Opening night arrives, and within an hour, some clever kid has convinced your "wise, ancient oracle" to start beatboxing. By closing time, it's drifted into a depressed philosophy student riffing on Nietzsche. The specific OSC messages you needed it to send to your TouchDesigner patch? A distant memory.</p>
+                        <p><strong>You're left debugging a mess instead of celebrating a success.</strong></p>
+                        <div class="action-buttons">
+                            <a href="#" class="btn primary">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                                Join the Movement</a>
+                            <a href="#" class="btn secondary">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                                </svg>
+                                Join Discord</a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="image-container">
+                            <div class="image-inner">
+                                <img src="monster.png" alt="Creative chaos monster in studio" class="monster-img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section style="background-color: #1a1a1a;">
+        <div class="container">
+            <h3>Here's the truth of our field:</h3>
+            <p><strong>We are all reinventing this in isolation.</strong> We whisper tips to each other—"compressed memory prompts work better," "add another call to an editor model to curb the weirdness"—but there's no shared playbook. No place to learn from each other's failures or build upon each other's breakthroughs.</p>
+            
+            <p>We are forced to direct groundbreaking performances with the digital equivalent of duct tape and prayers, at the mercy of corporate AI platforms that don't understand art and will break our projects with their next API update.</p>
+            
+            <div class="why-now-highlight">
+                <h4>Why Now? The Window is Closing.</h4>
+                <p>The interactive art market is exploding ($5.8B to $17.72B by 2029). Yet we're still struggling with basics like: "How do you prevent personality drift?" and "Why are we each building the same messy stack from scratch?"</p>
+                <p>This isn't a startup pitch; it's a build-out. We're creating the essential infrastructure for our field—<strong>open source, MIT Licensed, and owned by the community, forever.</strong> The knowledge, the tools, and the wins stay where they belong.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>Our Vision</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Think of this like TouchDesigner or Processing in the early days—not perfectly polished, but built <em>by and for the community</em> to solve the real, gritty problems we actually face. This is a toolkit where your clever workarounds become building blocks for everyone.</p>
+            
+            <h3>Part 1: The Director's Toolkit (Our Shared Foundation)</h3>
+            <p>This is the core: a free studio to let us move from wrestling with prompts to actually <em>directing performances</em>.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                    <h4>Author Scenarios, Not Just Prompts</h4>
+                    <p>Write modular, plain-language "scenes" that define behavior. These become reusable, shareable recipes.</p>
+                    <em>"When the vibe gets low, tell a specific short, uplifting story and trigger the 'warm sunrise' lighting preset."</em>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                    </div>
+                    <h4>Simulate the Chaos</h4>
+                    <p>Test your creation against the beautiful, brutal reality of an audience <em>before</em> you deploy.</p>
+                    <em>Generate thousands of chaotic user journeys overnight and wake up to a "greatest hits" and "worst failures" reel.</em>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </div>
+                    <h4>A Living Library of Creative Knowledge</h4>
+                    <p>Every successful interaction, every clever rule, every "magic moment" can be shared back to the community, so we can finally build on shared best practices, not isolated hacks.</p>
+                </div>
+            </div>
+            
+            <h3>Part 2: The Ecosystem (Our Collective Brain)</h3>
+            <p>The Toolkit is the entry point. The long-term vision is a self-improving ecosystem for interactive AI.</p>
+            
+            <ul>
+                <li><strong>A Marketplace for Building Blocks, Not Black Boxes:</strong> Community-run modules for specific sensors, behavior packs for better AI listeners, and memory systems that actually work.</li>
+                <li><strong>Plug-and-Play for the Tools We Love:</strong> Native, community-maintained integrations with TouchDesigner, Unreal, MadMapper, and more. No more janky, custom middleware.</li>
+                <li><strong>Monitor and Deploy Fearlessly:</strong> Real-time orchestration that doesn't suck. A unified dashboard to see your characters' behavioral states, interaction queues, and hardware connections—whether it's one installation or a hundred.</li>
+                <li><strong>One-Click Ensembles (The Optional Cloud Layer):</strong> For larger projects needing reliability and scale, we'll offer a managed platform built on the open-source core. This is how we'll fund the public tools—by offering powerful services, not by selling out the community.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h3>Let's Build This Thing</h3>
+            <div class="section-divider"></div>
+            <div class="cta-content">
+                <p>This isn't about capturing a "multi-billion dollar market." It's about empowering a thousand artists to create experiences that are currently impossible. It's about creating a shared language and a collective intelligence for an entirely new art form.</p>
+                <p>We're starting with the essentials: a robust tool for scenario authoring and simulation. But its soul will be the community that forms around it.</p>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="#" class="btn primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Join our email list</a>
+                <a href="#" class="btn secondary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                    </svg>
+                    Join our Discord</a>
+                <a href="mailto:hello@directorstoolbox.org" class="btn tertiary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                    Email us directly</a>
+            </div>
+            
+            <div class="benefit-details">
+                <div class="benefit-section">
+                    <h5>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email Updates</h5>
+                    <p>First access to alpha releases, community updates, and roadmap progress. No spam—just substantial updates when we have something real to share.</p>
+                </div>
+                
+                <div class="benefit-section">
+                    <h5>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                        </svg>
+                        Discord Community</h5>
+                    <p>Connect with peers, share disaster stories, and help shape the roadmap:</p>
+                    <div class="channel-list">#urgent_requests • #show_and_tell • #developers • #best_practices • #debug_hell</div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 2rem; font-style: italic; font-family: 'Fira Code', monospace;">Built by artists, for artists.</p>
+            <p style="font-size: 1.3rem; font-weight: 700; margin-top: 1rem; color: var(--accent);">Stop reinventing alone. Start directing together.</p>
+        </div>
+    </section>
+</body>
+</html>
